@@ -54,6 +54,12 @@ a {
 
   padding: 12px 24px;
   font-size: 1.4rem;
+
+  outline: none;
+  border: none;
+}
+.btn:hover {
+  opacity: 0.9;
 }
 .btn-medium {
   padding: 11px 37px;
@@ -71,11 +77,13 @@ a {
 }
 
 /* Nav */
-.fixed-header {
-  position: sticky;
+header {
   padding: 36px 0 10px;
-  z-index: 1;
   background-color: #fffcf4;
+}
+header.fixed {
+  position: sticky;
+  z-index: 1;
   top: -26px;
 }
 
@@ -98,10 +106,10 @@ a {
   position: relative;
 }
 .navbar ul a:hover,
-.navbar ul a:active {
-  font-weight: 600;
+.navbar ul a.active {
+  text-shadow: 1px 0 0 currentColor;
 }
-.navbar ul a:hover:after {
+.navbar ul a.active:after {
   content: '';
   display: block;
   position: absolute;
@@ -268,12 +276,17 @@ a {
 .courses .text-block {
   width: 458px;
 }
-.courses .prev,
-.courses .next {
+.courses button {
   display: inline-block;
   background-image: url(../img/nav.svg);
   width: 40px;
   height: 40px;
+  outline: none;
+  border: none;
+  background-color: unset;
+}
+.courses button:hover {
+  cursor: pointer;
 }
 .courses .prev {
   margin-left: auto;
@@ -375,9 +388,18 @@ a {
   padding: 96px 0;
   background-color: var(--second-color);
 }
+.comment .list {
+  display: flex;
+  overflow: hidden;
+}
+.comment .list .item {
+  width: 100%;
+  flex-shrink: 0;
+}
 .comment .avatar-block .avatar {
   width: 72px;
   height: 72px;
+  object-fit: cover;
   border-radius: 100%;
 }
 .comment .avatar-block .title {
@@ -402,35 +424,29 @@ a {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.comment .avatar-block .indicator {
-  --size: 6px;
-  color: var(--primary-color);
-  margin-left: calc(var(--size) * 2);
-  margin-top: 2px;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 100%;
-  background-color: currentColor;
-  position: relative;
+.comment .avatar-block .dots {
+  margin-top: 28px;
 }
-.comment .avatar-block .indicator::before,
-.comment .avatar-block .indicator::after {
-  content: '';
-  display: inline;
-  position: absolute;
+.comment .avatar-block .dots .dot + .dot {
+  margin-left: 5px;
+}
+.comment .avatar-block .dots .dot {
+  --size: 6px;
+  display: inline-block;
+  color: var(--primary-color);
   width: var(--size);
   height: var(--size);
   border-radius: 100%;
   background-color: currentColor;
   opacity: 0.2;
+  cursor: pointer;
 }
-.comment .avatar-block .indicator::before {
-  left: calc(-1 * var(--size) * 2);
-}
-.comment .avatar-block .indicator::after {
-  left: calc(1 * var(--size) * 2);
+.comment .avatar-block .dots .dot.active {
+  opacity: 1;
+  cursor: default;
 }
 .comment .info {
+  margin-top: 28px;
   width: 740px;
   margin-left: auto;
   color: #fff;
@@ -553,16 +569,19 @@ a {
 .reviews .list {
   margin-top: 55px;
   justify-content: space-between;
+  gap: 30px;
+  overflow: hidden;
 }
 .reviews .list .item {
   border-radius: 16px;
   background: #fff;
   box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.05);
-  width: 370px;
+  width: calc(100% / 3 - 20px);
   height: 467px;
+  flex-shrink: 0;
 }
 .reviews .list .item .thumb {
-  width: 370px;
+  width: 100%;
   height: 250px;
   object-fit: cover;
   border-top-right-radius: 16px;
@@ -571,34 +590,37 @@ a {
 .reviews .list .item .info {
   padding: 20px 20px 28px;
 }
-.reviews .list .item .info .date-row {
-  align-items: center;
-  position: relative;
-}
-.reviews .list .item .info .date-row::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  display: inline;
-  height: 1px;
-  border-radius: 0.5px;
-  width: 160px;
-  background: var(--light-gray-color);
-}
 .reviews .list .item .info .date {
   color: var(--gray-color);
   font-size: 1.4rem;
   font-weight: 400;
-  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding-bottom: 12px;
 }
-.reviews .list .item .info .indicator {
-  width: 6px;
+.reviews .list .item .info .date::before {
+  content: '';
+  display: inline-block;
   height: 6px;
+  width: 6px;
   border-radius: 100%;
-  background-color: var(--primary-color);
+  background: var(--primary-color);
+  margin-right: 4px;
+}
+.reviews .list .item .info .date::after {
+  position: absolute;
+  content: '';
+  display: block;
+  background-color: #e2dfda;
+  height: 1px;
+  border-radius: 0.5px;
+  bottom: 0;
+  left: 0;
+  right: -27px;
 }
 .reviews .list .item .info .title {
-  margin-top: 24px;
+  margin-top: 12px;
   color: #171100;
   font-size: 1.6rem;
   font-weight: 600;
@@ -611,15 +633,29 @@ a {
 .reviews .list .item .info .btn {
   margin-top: 12px;
 }
-.reviews .footer .indicator {
+.reviews .list .item .info .btn:hover {
+  background-color: var(--primary-color);
+}
+.reviews .footer .dots {
   margin: 38px auto 0;
+  display: flex;
+  justify-content: center;
+}
+.reviews .footer .dot {
+  display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 100%;
-  background-color: var(--primary-color);
-  box-shadow: 10px 0px 1px var(--gray-color), -10px 0px 1px var(--gray-color);
+  background-color: var(--gray-color);
+  cursor: pointer;
 }
-
+.reviews .footer .dot + .dot {
+  margin-left: 6px;
+}
+.reviews .footer .dot.active {
+  background-color: var(--primary-color);
+  cursor: default;
+}
 /* Footer */
 footer.footer {
   background: var(--second-color);
